@@ -9,19 +9,21 @@ export default function Home() {
   const [todos, setTodos] = useState([])
 
 
-  useEffect(()=>{
-    const todos=JSON.parse(localStorage.getItem('todos'))
-    if(todos && todos.length>0){
+  useEffect(() => {
+    const todos = JSON.parse(localStorage.getItem('todos'))
+    if (todos && todos.length > 0) {
       setTodos(todos)
     }
-  },[])
+  }, [])
 
-  useEffect(()=>{
-    if(todos.length>0){
+  useEffect(() => {
+    if (todos.length > 0) {
 
-      localStorage.setItem('todos',JSON.stringify(todos))
+      localStorage.setItem('todos', JSON.stringify(todos))
+    } else {
+      localStorage.removeItem('todos')
     }
-  },[todos])
+  }, [todos])
 
   const addTodo = (todo) => {
     setTodos((prev) => [{ id: Date.now(), ...todo }, ...prev])
@@ -35,6 +37,7 @@ export default function Home() {
 
   const removeTodo = (id) => {
     setTodos((prev) => prev.filter((prevTodo) => prevTodo.id !== id))
+
   }
   const toggleComplete = (id) => {
     setTodos((prev) => prev?.map((toggleTodo) => toggleTodo.id === id ? { ...toggleTodo, completed: !toggleTodo.completed } : toggleTodo))
@@ -44,7 +47,7 @@ export default function Home() {
     <TodoProvider value={{ todos, addTodo, updateTodo, removeTodo, toggleComplete }}>
       <div className='w-full min-h-screen flex items-center flex-col '>
         <div className='my-10'>  <span className='text-4xl  text-cyan-400 font-extrabold '>Task</span><span className='text-black font-extrabold text-3xl '>Buddy</span>
-        </div>    
+        </div>
         <TodoForm />
         <hr className='w-full h-1 border-t-4 border-gray-400 my-4' />
         {todos.map((item) => (
